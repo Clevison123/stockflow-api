@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using StockFlow.API.Data;
-using StockFlow.API.Interfaces;
-using StockFlow.API.Middleware;
-using StockFlow.API.Services;
-using StockFlow.API.Validators;
+using StockFlow.API.Application.Interfaces;
+using StockFlow.API.Application.Services;
+using StockFlow.API.Application.Validators;
+using StockFlow.API.Infrastructure.Data;
+using StockFlow.API.Presentation.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +16,12 @@ var builder = WebApplication.CreateBuilder(args);
 // CONTROLLERS
 builder.Services.AddControllers();
 
-
-// DATABASE (SQL SERVER)
+// DATABASE (com retry para evitar falhas de conexão)
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        o => o.EnableRetryOnFailure()
+    ));
 
 // SERVICES (INJEÇÃO DE DEPENDÊNCIA)
 builder.Services.AddScoped<CategoryService>();
@@ -31,21 +32,23 @@ builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 builder.Services.AddScoped<IReportService, ReportService>();
 
-// AUDITORIA (ESSENCIAL)
+// AUDITORIA
 builder.Services.AddScoped<IAuditService, AuditService>();
 
-
-// CURRENT USER (PEGAR USUÁRIO LOGADO)
-builder.Services.AddHttpContextAccessor(); 
+// CURRENT USER
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
-
 
 // FLUENT VALIDATION
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<CreateProductDtoValidator>();
 
+// JWT AUTHENTICATION (corrigido)
+var jwtKey = builder.Configuration["Jwt:Key"];
 
-// JWT AUTHENTICATION
+if (string.IsNullOrEmpty(jwtKey))
+    throw new Exception("JWT Key is not configured!");
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -55,15 +58,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
+            ClockSkew = TimeSpan.Zero,
 
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
 
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                Encoding.UTF8.GetBytes(jwtKey))
         };
     });
-
 
 // AUTHORIZATION (POLICIES)
 builder.Services.AddAuthorization(options =>
@@ -90,14 +93,11 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Admin"));
 });
 
-
 // SWAGGER
-
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    // GRUPOS 
     options.SwaggerDoc("Auth", new OpenApiInfo { Title = "Auth", Version = "v1" });
     options.SwaggerDoc("AuditLog", new OpenApiInfo { Title = "AuditLog", Version = "v1" });
     options.SwaggerDoc("Products", new OpenApiInfo { Title = "Products", Version = "v1" });
@@ -108,7 +108,6 @@ builder.Services.AddSwaggerGen(options =>
     options.SwaggerDoc("Suppliers", new OpenApiInfo { Title = "Suppliers", Version = "v1" });
     options.SwaggerDoc("Test", new OpenApiInfo { Title = "Test", Version = "v1" });
 
-    // BOTÃO AUTHORIZE (JWT)
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Description = "Enter: Bearer {your token}",
@@ -134,47 +133,44 @@ builder.Services.AddSwaggerGen(options =>
         }
     });
 
-    // LIGA CONTROLLER AO GRUPO
     options.DocInclusionPredicate((docName, apiDesc) =>
     {
         return apiDesc.GroupName == docName;
     });
 });
 
-
 // BUILD APP
 var app = builder.Build();
 
-
 // MIDDLEWARE PIPELINE
-
-// Middleware global de exceção 
 app.UseMiddleware<ExceptionMiddleware>();
 
-// HTTPS
 app.UseHttpsRedirection();
 
-// AUTENTICAÇÃO 
+app.UseRouting();
+
 app.UseAuthentication();
 app.UseAuthorization();
 
-// SWAGGER 
-app.UseSwagger();
-app.UseSwaggerUI(options =>
+// SWAGGER (apenas em desenvolvimento)
+if (app.Environment.IsDevelopment())
 {
-    options.SwaggerEndpoint("/swagger/Auth/swagger.json", "Auth");
-    options.SwaggerEndpoint("/swagger/AuditLog/swagger.json", "AuditLog");
-    options.SwaggerEndpoint("/swagger/Products/swagger.json", "Products");
-    options.SwaggerEndpoint("/swagger/Categories/swagger.json", "Categories");
-    options.SwaggerEndpoint("/swagger/Dashboard/swagger.json", "Dashboard");
-    options.SwaggerEndpoint("/swagger/Reports/swagger.json", "Reports");
-    options.SwaggerEndpoint("/swagger/StockMovements/swagger.json", "StockMovements");
-    options.SwaggerEndpoint("/swagger/Suppliers/swagger.json", "Suppliers");
-    options.SwaggerEndpoint("/swagger/Test/swagger.json", "Test");
+    app.UseSwagger();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/Auth/swagger.json", "Auth");
+        options.SwaggerEndpoint("/swagger/AuditLog/swagger.json", "AuditLog");
+        options.SwaggerEndpoint("/swagger/Products/swagger.json", "Products");
+        options.SwaggerEndpoint("/swagger/Categories/swagger.json", "Categories");
+        options.SwaggerEndpoint("/swagger/Dashboard/swagger.json", "Dashboard");
+        options.SwaggerEndpoint("/swagger/Reports/swagger.json", "Reports");
+        options.SwaggerEndpoint("/swagger/StockMovements/swagger.json", "StockMovements");
+        options.SwaggerEndpoint("/swagger/Suppliers/swagger.json", "Suppliers");
+        options.SwaggerEndpoint("/swagger/Test/swagger.json", "Test");
 
-    options.DisplayRequestDuration();
-});
-
+        options.DisplayRequestDuration();
+    });
+}
 
 // MAP CONTROLLERS
 app.MapControllers();
