@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using StockFlow.API.Application.DTOs.Auth;
 using StockFlow.API.Application.Interfaces;
 using StockFlow.API.Domain.Constants;
 using StockFlow.API.Domain.Entities;
@@ -32,10 +33,15 @@ namespace StockFlow.API.Application.Services
         // REGISTER
         public async Task<User?> RegisterAsync(RegisterDto dto)
         {
+            // Verifica se email já existe
             var userExists = await _context.Users.AnyAsync(u => u.Email == dto.Email);
 
             if (userExists)
-                return null;
+                throw new Exception("Email already exists.");
+
+            // Verifica se as senhas são iguais
+            if (dto.Password != dto.ConfirmPassword)
+                throw new Exception("Passwords do not match.");
 
             var user = new User
             {
@@ -43,11 +49,12 @@ namespace StockFlow.API.Application.Services
                 Email = dto.Email,
                 PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
 
-                // 🔐 NUNCA deixe o usuário escolher role direto
+                // NUNCA deixe o usuário escolher role direto
                 Role = UserRole.Cashier
             };
 
             _context.Users.Add(user);
+
             await _context.SaveChangesAsync();
 
             await _auditService.LogAsync(new AuditLog
@@ -63,7 +70,7 @@ namespace StockFlow.API.Application.Services
         }
 
         // LOGIN
-        public async Task<object?> LoginAsync(LoginDto dto)
+        public async Task<AuthResponseDto?> LoginAsync(LoginDto dto)
         {
             var user = await _context.Users
                 .FirstOrDefaultAsync(u => u.Email == dto.Email);
@@ -74,8 +81,9 @@ namespace StockFlow.API.Application.Services
             var jwtToken = GenerateJwtToken(user);
             var refreshToken = GenerateRefreshToken();
 
-            // 🔐 salva HASH do refresh token
+            // salva HASH do refresh token
             user.RefreshToken = BCrypt.Net.BCrypt.HashPassword(refreshToken);
+
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
             await _context.SaveChangesAsync();
@@ -89,15 +97,15 @@ namespace StockFlow.API.Application.Services
                 EntityId = user.Id.ToString()
             });
 
-            return new
+            return new AuthResponseDto
             {
-                token = jwtToken,
-                refreshToken
+                Token = jwtToken,
+                RefreshToken = refreshToken
             };
         }
 
         // REFRESH TOKEN
-        public async Task<object?> RefreshTokenAsync(TokenDto dto)
+        public async Task<AuthResponseDto?> RefreshTokenAsync(TokenDto dto)
         {
             var users = await _context.Users
                 .Where(u => u.RefreshToken != null)
@@ -106,21 +114,41 @@ namespace StockFlow.API.Application.Services
             var user = users.FirstOrDefault(u =>
                 BCrypt.Net.BCrypt.Verify(dto.RefreshToken, u.RefreshToken));
 
-            if (user == null || user.RefreshTokenExpiryTime < DateTime.UtcNow)
+            // verifica se usuário existe
+            if (user == null)
                 return null;
 
+            // verifica se refresh token expirou
+            if (user.RefreshTokenExpiryTime < DateTime.UtcNow)
+                return null;
+
+            // gera novo JWT
             var newJwt = GenerateJwtToken(user);
+
+            // gera novo refresh token
             var newRefreshToken = GenerateRefreshToken();
 
+            // salva HASH do novo refresh token
             user.RefreshToken = BCrypt.Net.BCrypt.HashPassword(newRefreshToken);
+
+            // nova expiração
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
             await _context.SaveChangesAsync();
 
-            return new
+            await _auditService.LogAsync(new AuditLog
             {
-                token = newJwt,
-                refreshToken = newRefreshToken
+                UserId = user.Id,
+                UserEmail = user.Email,
+                Action = "REFRESH_TOKEN",
+                EntityName = "User",
+                EntityId = user.Id.ToString()
+            });
+
+            return new AuthResponseDto
+            {
+                Token = newJwt,
+                RefreshToken = newRefreshToken
             };
         }
 
@@ -137,7 +165,7 @@ namespace StockFlow.API.Application.Services
                 new Claim(CustomClaims.UserId, user.Id.ToString()),
                 new Claim(CustomClaims.FullName, user.FullName),
 
-                // 🔥 importante em produção
+                //importante em produção
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
