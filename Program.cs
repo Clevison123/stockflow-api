@@ -153,7 +153,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // SWAGGER (apenas em desenvolvimento)
-if (app.Environment.IsDevelopment())
+if (true)
 {
     app.UseSwagger();
     app.UseSwaggerUI(options =>
