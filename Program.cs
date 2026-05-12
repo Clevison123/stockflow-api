@@ -48,7 +48,8 @@ builder.Services.AddCors(options =>
             policy
                 .WithOrigins(
                     "http://localhost:5173",
-                    "http://localhost:5174"
+                    "http://localhost:5174",
+                    "http://localhost:5175"
                 )
                 .AllowAnyHeader()
                 .AllowAnyMethod();
@@ -89,25 +90,25 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("DashboardAccess", policy =>
-        policy.RequireRole("Owner", "Admin", "Manager"));
+        policy.RequireRole("Owner", "Admin", "Manager", "Cashier"));
 
     options.AddPolicy("ReportsAccess", policy =>
-        policy.RequireRole("Owner", "Admin", "Manager"));
+        policy.RequireRole("Owner", "Admin", "Manager", "Cashier"));
 
     options.AddPolicy("StockMovementWrite", policy =>
         policy.RequireRole("Owner", "Admin", "Manager", "Stocker"));
 
     options.AddPolicy("StockMovementRead", policy =>
-        policy.RequireRole("Owner", "Admin", "Manager"));
+        policy.RequireRole("Owner", "Admin", "Manager", "Cashier"));
 
     options.AddPolicy("SalesAccess", policy =>
-        policy.RequireRole("Owner", "Admin", "Cashier"));
+        policy.RequireRole("Owner", "Admin", "Cashier")); // PS: após os testes remova o "Cashier" de todos as demais polices menos nessa curjo o cometario esta a sua frente
 
     options.AddPolicy("SupplierWrite", policy =>
-        policy.RequireRole("Admin", "Manager"));
+        policy.RequireRole("Admin", "Manager", "Cashier"));
 
     options.AddPolicy("SupplierDelete", policy =>
-        policy.RequireRole("Admin"));
+        policy.RequireRole("Admin", "Cashier"));
 });
 
 // SWAGGER
