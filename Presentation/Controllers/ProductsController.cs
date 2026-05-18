@@ -53,7 +53,8 @@ namespace StockFlow.API.Presentation.Controllers
 
         //Apenas Admin
         [HttpPost]
-        [Authorize(Roles = Roles.Admin)]
+        //[Authorize(Roles = Roles.Admin)]
+        [Authorize(Policy = "SalesAccess")] // apenas para testes
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> Create([FromBody] CreateProductDto dto)
@@ -70,7 +71,8 @@ namespace StockFlow.API.Presentation.Controllers
 
         //Apenas Admin
         [HttpPut("{id:int}")]
-        [Authorize(Roles = Roles.Admin)]
+        //[Authorize(Roles = Roles.Admin)]
+        [Authorize(Policy = "SalesAccess")]// apenas para testes
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -88,7 +90,8 @@ namespace StockFlow.API.Presentation.Controllers
 
         //Apenas Admin
         [HttpDelete("{id:int}")]
-        [Authorize(Roles = Roles.Admin)]
+        //[Authorize(Roles = Roles.Admin)] 
+        [Authorize(Policy = "SalesAccess")] // apenas para testes
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Delete(int id)
