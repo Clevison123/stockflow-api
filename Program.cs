@@ -96,7 +96,7 @@ builder.Services.AddAuthorization(options =>
         policy.RequireRole("Owner", "Admin", "Manager", "Cashier"));
 
     options.AddPolicy("StockMovementWrite", policy =>
-        policy.RequireRole("Owner", "Admin", "Manager", "Stocker"));
+        policy.RequireRole("Owner", "Admin", "Manager", "Cashier"));
 
     options.AddPolicy("StockMovementRead", policy =>
         policy.RequireRole("Owner", "Admin", "Manager", "Cashier"));
