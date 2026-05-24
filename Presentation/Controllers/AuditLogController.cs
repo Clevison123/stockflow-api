@@ -8,7 +8,7 @@ namespace StockFlow.API.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin,Cashier")]
     [ApiExplorerSettings(GroupName = "AuditLog")]
     public class AuditLogController : ControllerBase
     {
