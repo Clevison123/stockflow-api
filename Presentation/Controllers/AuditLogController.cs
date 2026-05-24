@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StockFlow.API.DTOs.Audit;
 using StockFlow.API.Infrastructure.Data;
 
 namespace StockFlow.API.Presentation.Controllers
@@ -26,7 +27,16 @@ namespace StockFlow.API.Presentation.Controllers
                 .Take(100)
                 .ToListAsync();
 
-            return Ok(logs);
+            var logsDto = logs.Select(a => new AuditLogDto
+            {
+                UserEmail = a.UserEmail,
+                Action = a.Action,
+                EntityName = a.EntityName,
+                EntityId = a.EntityId,
+                Timestamp = a.Timestamp
+            });
+
+            return Ok(logsDto);
         }
     }
 }
