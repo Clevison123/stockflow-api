@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StockFlow.API.Application.DTOs.Users;
 using StockFlow.API.Application.Interfaces;
+using StockFlow.API.Presentation.Responses;
 
 namespace StockFlow.API.Presentation.Controllers
 {
@@ -18,11 +19,15 @@ namespace StockFlow.API.Presentation.Controllers
 
         // GET: api/users
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] string? search)
         {
-            var users = await _userService.GetAllAsync();
+            var users = await _userService.GetAllAsync(search);
 
-            return Ok(users);
+            return Ok(
+                ApiResponse<IEnumerable<UserResponseDto>>
+                    .SuccessResponse(users)
+            );
         }
 
         // GET: api/users/1
@@ -31,7 +36,10 @@ namespace StockFlow.API.Presentation.Controllers
         {
             var user = await _userService.GetByIdAsync(id);
 
-            return Ok(user);
+            return Ok(
+                ApiResponse<UserResponseDto>
+                    .SuccessResponse(user)
+            );
         }
 
         // POST: api/users
@@ -39,13 +47,16 @@ namespace StockFlow.API.Presentation.Controllers
         public async Task<IActionResult> Create(
             [FromBody] CreateUserDto dto)
         {
-            var createdUser =
-                await _userService.CreateAsync(dto);
+            var createdUser = await _userService.CreateAsync(dto);
 
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = createdUser.Id },
-                createdUser);
+                ApiResponse<UserResponseDto>
+                    .SuccessResponse(
+                        createdUser,
+                        "User created successfully")
+            );
         }
 
         // PUT: api/users/1
@@ -54,10 +65,14 @@ namespace StockFlow.API.Presentation.Controllers
             int id,
             [FromBody] UpdateUserDto dto)
         {
-            var updatedUser =
-                await _userService.UpdateAsync(id, dto);
+            var updatedUser = await _userService.UpdateAsync(id, dto);
 
-            return Ok(updatedUser);
+            return Ok(
+                ApiResponse<UserResponseDto>
+                    .SuccessResponse(
+                        updatedUser,
+                        "User updated successfully")
+            );
         }
 
         // PATCH: api/users/1/deactivate
@@ -66,7 +81,11 @@ namespace StockFlow.API.Presentation.Controllers
         {
             await _userService.DeactivateAsync(id);
 
-            return NoContent();
+            return Ok(
+                ApiResponse<string>
+                    .SuccessResponse(
+                        "User deactivated successfully")
+            );
         }
 
         // PATCH: api/users/1/activate
@@ -75,7 +94,11 @@ namespace StockFlow.API.Presentation.Controllers
         {
             await _userService.ActivateAsync(id);
 
-            return NoContent();
+            return Ok(
+                ApiResponse<string>
+                    .SuccessResponse(
+                        "User activated successfully")
+            );
         }
     }
 }

@@ -17,32 +17,49 @@ namespace StockFlow.API.Application.Services
             _context = context;
         }
 
-        public async Task<IEnumerable<UserResponseDto>> GetAllAsync()
+        // GET ALL USERS
+        public async Task<IEnumerable<UserResponseDto>> GetAllAsync(
+            string? search)
         {
-            var users = await _context.Users
-                .Where(u => u.IsActive)
+            var query = _context.Users.AsQueryable();
+
+            // SEARCH
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                search = search
+                    .Trim()
+                    .ToLower();
+
+                query = query.Where(u =>
+                    u.FullName.ToLower().Contains(search) ||
+                    u.Email.ToLower().Contains(search));
+            }
+
+            var users = await query
                 .Select(user => MapToResponse(user))
                 .ToListAsync();
 
             return users;
         }
 
+        // GET USER BY ID
         public async Task<UserResponseDto> GetByIdAsync(int id)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u =>
-                    u.Id == id &&
-                    u.IsActive);
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user is null)
             {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException(
+                    "User not found");
             }
 
             return MapToResponse(user);
         }
 
-        public async Task<UserResponseDto> CreateAsync(CreateUserDto dto)
+        // CREATE USER
+        public async Task<UserResponseDto> CreateAsync(
+            CreateUserDto dto)
         {
             var normalizedEmail = dto.Email
                 .Trim()
@@ -77,18 +94,18 @@ namespace StockFlow.API.Application.Services
             return MapToResponse(user);
         }
 
+        // UPDATE USER
         public async Task<UserResponseDto> UpdateAsync(
             int id,
             UpdateUserDto dto)
         {
             var user = await _context.Users
-                .FirstOrDefaultAsync(u =>
-                    u.Id == id &&
-                    u.IsActive);
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user is null)
             {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException(
+                    "User not found");
             }
 
             var normalizedEmail = dto.Email
@@ -116,6 +133,7 @@ namespace StockFlow.API.Application.Services
             return MapToResponse(user);
         }
 
+        // DEACTIVATE USER
         public async Task DeactivateAsync(int id)
         {
             var user = await _context.Users
@@ -123,7 +141,8 @@ namespace StockFlow.API.Application.Services
 
             if (user is null)
             {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException(
+                    "User not found");
             }
 
             if (!user.IsActive)
@@ -138,6 +157,7 @@ namespace StockFlow.API.Application.Services
             await _context.SaveChangesAsync();
         }
 
+        // ACTIVATE USER
         public async Task ActivateAsync(int id)
         {
             var user = await _context.Users
@@ -145,7 +165,8 @@ namespace StockFlow.API.Application.Services
 
             if (user is null)
             {
-                throw new NotFoundException("User not found");
+                throw new NotFoundException(
+                    "User not found");
             }
 
             if (user.IsActive)
@@ -160,7 +181,9 @@ namespace StockFlow.API.Application.Services
             await _context.SaveChangesAsync();
         }
 
-        private static UserResponseDto MapToResponse(User user)
+        // MAP ENTITY TO DTO
+        private static UserResponseDto MapToResponse(
+            User user)
         {
             return new UserResponseDto
             {
