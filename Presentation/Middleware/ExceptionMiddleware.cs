@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json;
 using StockFlow.API.Application.Exceptions;
 using StockFlow.API.Presentation.Responses;
 
@@ -8,10 +7,14 @@ namespace StockFlow.API.Presentation.Middleware
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly ILogger<ExceptionMiddleware> _logger;
 
-        public ExceptionMiddleware(RequestDelegate next)
+        public ExceptionMiddleware(
+            RequestDelegate next,
+            ILogger<ExceptionMiddleware> logger)
         {
             _next = next;
+            _logger = logger;
         }
 
         public async Task InvokeAsync(HttpContext context)
@@ -20,49 +23,111 @@ namespace StockFlow.API.Presentation.Middleware
             {
                 await _next(context);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                await HandleExceptionAsync(context, ex);
+                _logger.LogError(
+                    exception,
+                    "An exception occurred: {Message}",
+                    exception.Message);
+
+                await HandleExceptionAsync(context, exception);
             }
         }
 
-        private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private static async Task HandleExceptionAsync(
+            HttpContext context,
+            Exception exception)
         {
             context.Response.ContentType = "application/json";
 
-            var statusCode = exception switch
-            {
-                NotFoundException => HttpStatusCode.NotFound,
-                BusinessRuleException => HttpStatusCode.BadRequest,
-                _ => HttpStatusCode.InternalServerError
-            };
+            var statusCode = GetStatusCode(exception);
 
-            var message = exception switch
-            {
-                NotFoundException => exception.Message,
-                BusinessRuleException => exception.Message,
-                _ => "An unexpected error occurred."
-            };
-
-            var errors = exception switch
-            {
-                NotFoundException => new List<string> { exception.Message },
-                BusinessRuleException => new List<string> { exception.Message },
-                _ => new List<string> { "Internal server error." }
-            };
+            context.Response.StatusCode = (int)statusCode;
 
             var response = new ErrorResponse
             {
                 Success = false,
-                Message = message,
-                Errors = errors
+                Message = GetMessage(exception),
+                Errors = GetErrors(exception)
             };
 
-            context.Response.StatusCode = (int)statusCode;
+            await context.Response.WriteAsJsonAsync(response);
+        }
 
-            var jsonResponse = JsonSerializer.Serialize(response);
+        private static HttpStatusCode GetStatusCode(Exception exception)
+        {
+            return exception switch
+            {
+                ValidationException => HttpStatusCode.BadRequest,
 
-            await context.Response.WriteAsync(jsonResponse);
+                BadRequestException => HttpStatusCode.BadRequest,
+
+                NotFoundException => HttpStatusCode.NotFound,
+
+                UnauthorizedException => HttpStatusCode.Unauthorized,
+
+                ForbiddenException => HttpStatusCode.Forbidden,
+
+                ConflictException => HttpStatusCode.Conflict,
+
+                BusinessRuleException => HttpStatusCode.BadRequest,
+
+                _ => HttpStatusCode.InternalServerError
+            };
+        }
+
+        private static string GetMessage(Exception exception)
+        {
+            return exception switch
+            {
+                ValidationException => exception.Message,
+
+                BadRequestException => exception.Message,
+
+                NotFoundException => exception.Message,
+
+                UnauthorizedException => exception.Message,
+
+                ForbiddenException => exception.Message,
+
+                ConflictException => exception.Message,
+
+                BusinessRuleException => exception.Message,
+
+                _ => "An unexpected error occurred."
+            };
+        }
+
+        private static List<string> GetErrors(Exception exception)
+        {
+            return exception switch
+            {
+                ValidationException validationException
+                    => validationException.Errors,
+
+                BadRequestException
+                    => new List<string> { exception.Message },
+
+                NotFoundException
+                    => new List<string> { exception.Message },
+
+                UnauthorizedException
+                    => new List<string> { exception.Message },
+
+                ForbiddenException
+                    => new List<string> { exception.Message },
+
+                ConflictException
+                    => new List<string> { exception.Message },
+
+                BusinessRuleException
+                    => new List<string> { exception.Message },
+
+                _ => new List<string>
+                {
+                    "Internal server error."
+                }
+            };
         }
     }
 }

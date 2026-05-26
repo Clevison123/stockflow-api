@@ -8,7 +8,7 @@ namespace StockFlow.API.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin,Cashier")]
+    [Authorize(Roles = "Admin,Cashier")] // Após testes remova o cashier
     [ApiExplorerSettings(GroupName = "AuditLog")]
     public class AuditLogController : ControllerBase
     {

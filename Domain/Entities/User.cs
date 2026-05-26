@@ -10,6 +10,8 @@ namespace StockFlow.API.Domain.Entities
         public string PasswordHash { get; set; } = string.Empty;
         public UserRole Role { get; set; } = UserRole.Cashier;
 
+        public bool IsActive { get; set; } = true;
+
         // para o token
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
