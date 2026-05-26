@@ -4,6 +4,7 @@ using StockFlow.API.Application.DTOs.Users;
 using StockFlow.API.Application.Exceptions;
 using StockFlow.API.Application.Interfaces;
 using StockFlow.API.Domain.Entities;
+using StockFlow.API.Domain.Enums;
 using StockFlow.API.Infrastructure.Data;
 
 namespace StockFlow.API.Application.Services
@@ -31,8 +32,51 @@ namespace StockFlow.API.Application.Services
                     .ToLower();
 
                 query = query.Where(u =>
-                    u.FullName.ToLower().Contains(search) ||
-                    u.Email.ToLower().Contains(search));
+
+                    // FULL NAME
+                    u.FullName.ToLower().Contains(search)
+
+                    ||
+
+                    // EMAIL
+                    u.Email.ToLower().Contains(search)
+
+                    ||
+
+                    // ROLE
+                    (
+                        u.Role == UserRole.Owner &&
+                        search.Contains("owner")
+                    )
+
+                    ||
+
+                    (
+                        u.Role == UserRole.Admin &&
+                        search.Contains("admin")
+                    )
+
+                    ||
+
+                    (
+                        u.Role == UserRole.Manager &&
+                        search.Contains("manager")
+                    )
+
+                    ||
+
+                    (
+                        u.Role == UserRole.Stocker &&
+                        search.Contains("stocker")
+                    )
+
+                    ||
+
+                    (
+                        u.Role == UserRole.Cashier &&
+                        search.Contains("cashier")
+                    )
+                );
             }
 
             var users = await query
