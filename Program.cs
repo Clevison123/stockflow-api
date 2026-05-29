@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using StockFlow.API.Application.Interfaces;
-using StockFlow.API.Application.Services;
-using StockFlow.API.Application.Validators;
-using StockFlow.API.Infrastructure.Data;
-using StockFlow.API.Presentation.Middleware;
+using StockFlow.API.src.Application.Interfaces;
+using StockFlow.API.src.Application.Services;
+using StockFlow.API.src.Application.Validators;
+using StockFlow.API.src.Infrastructure.Data;
+using StockFlow.API.src.Presentation.Middleware;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
