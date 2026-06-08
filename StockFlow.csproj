@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="src\Infrastructure\Configurations\" />
+    <Folder Include="Infrastructure\Configurations\" />
   </ItemGroup>
 
 </Project>

@@ -1,79 +1,70 @@
-﻿# Fluxos do Sistema
+﻿# Fluxo — Recebimento de Mercadoria
 
----
+## Ator Principal
 
-# Fluxo — Login
+* Estoquista
+* Supervisor de Galpão
 
-1. Usuário informa email e senha
-2. Sistema valida credenciais
-3. JWT é gerado
-4. Usuário recebe acesso ao sistema
+## Pré-condições
 
----
+* Fornecedor cadastrado
+* Produtos cadastrados
+* Remessa (InboundShipment) registrada
+* Container identificado
 
-# Fluxo — Cadastro de Produto
+## Passos
 
-1. Usuário acessa módulo de produtos
-2. Sistema valida permissões
-3. Usuário informa:
-   - nome
-   - SKU
-   - categoria
-   - país origem
-   - garantia
-4. Sistema valida dados
-5. Produto é salvo
-6. Auditoria é registrada
+### Etapa 1 — Recebimento no Porto
 
----
+1. Mercadoria chega ao porto.
+2. Conferente verifica número do container.
+3. Conferente verifica documentação da remessa.
+4. Conferente compara produtos recebidos com a documentação enviada pelo fornecedor.
+5. Conferente verifica:
 
-# Fluxo — Entrada de Estoque
+   * quantidade;
+   * modelos;
+   * cores;
+   * tamanhos;
+   * lotes (quando aplicável).
+6. Caso existam divergências, o sistema registra uma ocorrência.
+7. Caso a remessa seja aprovada, o sistema altera o status para **ApprovedAtPort**.
 
-1. Usuário seleciona produto
-2. Usuário informa quantidade
-3. Sistema valida produto
-4. Estoque é atualizado
-5. Movimentação é criada
-6. Auditoria é registrada
+### Etapa 2 — Transporte até o Galpão
 
----
+8. Mercadoria é liberada para transporte.
+9. Sistema registra data de saída do porto.
+10. Sistema altera o status para **InTransitToWarehouse**.
 
-# Fluxo — Saída de Estoque
+### Etapa 3 — Recebimento no Galpão
 
-1. Usuário seleciona produto
-2. Usuário informa quantidade
-3. Sistema verifica estoque disponível
-4. Sistema impede estoque negativo
-5. Estoque é atualizado
-6. Movimentação é criada
-7. Auditoria é registrada
+11. Mercadoria chega ao galpão.
+12. Estoquista realiza nova conferência.
+13. Sistema compara a conferência do galpão com a conferência realizada no porto.
+14. Caso existam divergências, o sistema registra uma ocorrência.
+15. Sistema altera o status para **WarehouseReceiving**.
 
----
+### Etapa 4 — Inspeção de Qualidade
 
-# Fluxo — Ajuste de Estoque
+16. Produtos são inspecionados.
+17. São realizados testes de funcionamento quando aplicável.
+18. Produtos defeituosos geram um QualityIssue.
+19. Produtos com problemas podem gerar um SupplierClaim.
+20. Produtos aprovados seguem para armazenamento.
 
-1. Usuário solicita ajuste
-2. Sistema envia para aprovação
-3. Gerente aprova ou rejeita
-4. Estoque é atualizado
-5. Auditoria é registrada
+### Etapa 5 — Entrada em Estoque
 
----
+21. Sistema registra os ProductItems.
+22. Sistema registra Serial Numbers quando aplicável.
+23. Sistema cria movimentação de entrada.
+24. Sistema atualiza o estoque.
+25. Sistema registra auditoria.
+26. Sistema altera o status da remessa para **Completed**.
 
-# Fluxo — Devolução Produto Defeituoso
+## Pós-condições
 
-1. Produto retorna ao estoque
-2. Usuário registra devolução
-3. Sistema identifica serial number
-4. Produto é marcado como defeituoso
-5. Auditoria é registrada
-
----
-
-# Fluxo — Inventário
-
-1. Usuário inicia inventário
-2. Produtos são conferidos
-3. Sistema compara quantidade física
-4. Divergências são registradas
-5. Ajustes podem ser solicitados
+* Produtos disponíveis para venda.
+* Estoque atualizado.
+* Movimentações registradas.
+* Auditoria registrada.
+* Produtos defeituosos segregados para análise.
