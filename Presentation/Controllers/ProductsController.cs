@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StockFlow.API.Domain.Constants;
 using StockFlow.API.src.Presentation.Responses;
 using StockFlow.Application.DTOs.Catalog.Product;
-using StockFlow.Application.Interfaces.Catalog;
+using StockFlow.Application.Interfaces.Catalog.IServices;
 using StockFlow.Application.Interfaces.Identity;
 using StockFlow.Infrastructure.Extensions;
 

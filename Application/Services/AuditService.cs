@@ -1,5 +1,5 @@
 ﻿using StockFlow.Application.Interfaces.Identity;
-using StockFlow.Domain.Entities.Identity;
+using StockFlow.Domain.Entities.Audit;
 using StockFlow.Infrastructure.Data;
 
 namespace StockFlow.Application.Services

@@ -5,14 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StockFlow.API.src.Presentation.Middleware;
-using StockFlow.Application.Interfaces.Catalog;
+using StockFlow.Application.Interfaces.Catalog.IServices;
 using StockFlow.Application.Interfaces.Dashboard;
 using StockFlow.Application.Interfaces.Identity;
+using StockFlow.Application.Interfaces.Identity.IServices;
 using StockFlow.Application.Interfaces.Inventory;
 using StockFlow.Application.Interfaces.ResumeReports;
 using StockFlow.Application.Services;
+using StockFlow.Application.Services.Indentity;
+using StockFlow.Application.Settings;
 using StockFlow.Application.Validators;
 using StockFlow.Infrastructure.Data;
+using StockFlow.Application.Settings;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,6 +33,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
             npgsqlOptions.EnableRetryOnFailure();
         }));
 
+// SETTINGS
+
+builder.Services.Configure<JwtSettings>(
+    builder.Configuration.GetSection("Jwt"));
+
 // SERVICES
 builder.Services.AddScoped<IUserService, UserService>();
 
@@ -44,7 +53,10 @@ builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddScoped<IReportService, ReportService>();
 
-builder.Services.AddScoped< AuthService>();
+builder.Services.AddScoped<IJwtService,
+    JwtService>();
+builder.Services.AddScoped<IAuthService,
+    AuthService>();
 
 // AUDIT
 builder.Services.AddScoped<IAuditService, AuditService>();

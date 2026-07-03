@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Infrastructure\Configurations\" />
+    <Folder Include="Infrastructure\ExternalServices\" />
   </ItemGroup>
 
 </Project>

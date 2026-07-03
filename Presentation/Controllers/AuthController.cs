@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using StockFlow.API.src.Presentation.Responses;
 using StockFlow.Application.DTOs.Identity.Token;
 using StockFlow.Application.Interfaces.Identity;
-using StockFlow.Application.Services;
+using StockFlow.Application.Services.Indentity;
 
 namespace StockFlow.API.src.Presentation.Controllers
 {
