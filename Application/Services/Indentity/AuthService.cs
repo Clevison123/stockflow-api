@@ -212,10 +212,26 @@ namespace StockFlow.Application.Services.Indentity
         }
 
         // LOGOUT
-        public async Task LogoutAsync(
-            int userId)
+        public async Task LogoutAsync(string refreshToken)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrWhiteSpace(refreshToken))
+                throw new ArgumentException("Refresh Token é obrigatório.");
+
+            var currentRefreshToken = await _refreshTokenRepository.GetByTokenAsync(refreshToken);
+
+            if (currentRefreshToken == null)
+                throw new UnauthorizedAccessException("Refresh Token inválido.");
+
+            if (currentRefreshToken.ExpiresAt <= DateTime.UtcNow)
+                throw new UnauthorizedAccessException("Refresh Token expirado.");
+
+            if (currentRefreshToken.IsRevoked)
+                throw new UnauthorizedAccessException("Refresh Token já revogado.");
+
+            currentRefreshToken.IsRevoked = true;
+            currentRefreshToken.RevokedAt = DateTime.UtcNow;
+
+            await _refreshTokenRepository.UpdateAsync(currentRefreshToken);
         }
     }
 }
