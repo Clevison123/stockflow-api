@@ -7,6 +7,7 @@ using StockFlow.Domain.Entities.Catalog;
 using StockFlow.Application.DTOs.Catalog.Product;
 using StockFlow.Application.Interfaces.Identity;
 using StockFlow.Application.Interfaces.Catalog.IServices;
+using StockFlow.Application.Interfaces.IAudit;
 
 namespace StockFlow.Application.Services
 {

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using StockFlow.Application.DTOs.Identity.Audit;
+using StockFlow.Application.DTOs.Audit;
 
 namespace StockFlow.Application.Validators.Audit.Audit
 {
@@ -9,16 +9,12 @@ namespace StockFlow.Application.Validators.Audit.Audit
         public CreateAuditLogValidator()
         {
             RuleFor(x => x.Action)
-                .NotEmpty()
-                .WithMessage("A ação é obrigatória.")
-                .MaximumLength(100)
-                .WithMessage("A ação deve possuir no máximo 100 caracteres.");
+                .IsInEnum()
+                .WithMessage("A ação informada é inválida.");
 
-            RuleFor(x => x.EntityName)
-                .NotEmpty()
-                .WithMessage("O nome da entidade é obrigatório.")
-                .MaximumLength(100)
-                .WithMessage("O nome da entidade deve possuir no máximo 100 caracteres.");
+            RuleFor(x => x.Entity)
+                .IsInEnum()
+                .WithMessage("A entidade informada é inválida.");
 
             RuleFor(x => x.EntityId)
                 .NotEmpty()
@@ -33,6 +29,18 @@ namespace StockFlow.Application.Validators.Audit.Audit
             RuleFor(x => x.NewValues)
                 .MaximumLength(5000)
                 .When(x => !string.IsNullOrWhiteSpace(x.NewValues));
+            
+            RuleFor(x => x.ErrorMessage)
+                .MaximumLength(2000)
+                .When(x => !string.IsNullOrWhiteSpace(x.ErrorMessage));
+
+            RuleFor(x => x.IpAddress)
+                .MaximumLength(45)
+                .When(x => !string.IsNullOrWhiteSpace(x.IpAddress));
+
+            RuleFor(x => x.UserAgent)
+                .MaximumLength(1000)
+                .When(x => !string.IsNullOrWhiteSpace(x.UserAgent));
         }
     }
 }

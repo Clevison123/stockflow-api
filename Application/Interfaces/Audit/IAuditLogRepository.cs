@@ -1,6 +1,7 @@
 ﻿using StockFlow.Domain.Entities.Audit;
+using StockFlow.Domain.Enums;
 
-namespace StockFlow.Application.Interfaces.Identity
+namespace StockFlow.Application.Interfaces.IAudit
 {
     public interface IAuditLogRepository
     {
@@ -10,6 +11,6 @@ namespace StockFlow.Application.Interfaces.Identity
 
         Task<IEnumerable<AuditLog>> GetByUserIdAsync(int userId);
 
-        Task<IEnumerable<AuditLog>> GetByEntityNameAsync(string entityName);
+        Task<IEnumerable<AuditLog>> GetByEntityAsync(AuditEntity entity);
     }
 }

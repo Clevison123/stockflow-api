@@ -7,16 +7,17 @@ using Microsoft.OpenApi.Models;
 using StockFlow.API.src.Presentation.Middleware;
 using StockFlow.Application.Interfaces.Catalog.IServices;
 using StockFlow.Application.Interfaces.Dashboard;
+using StockFlow.Application.Interfaces.IAudit;
 using StockFlow.Application.Interfaces.Identity;
 using StockFlow.Application.Interfaces.Identity.IServices;
 using StockFlow.Application.Interfaces.Inventory;
 using StockFlow.Application.Interfaces.ResumeReports;
 using StockFlow.Application.Services;
+using StockFlow.Application.Services.Audit;
 using StockFlow.Application.Services.Indentity;
 using StockFlow.Application.Settings;
 using StockFlow.Application.Validators;
 using StockFlow.Infrastructure.Data;
-using StockFlow.Application.Settings;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,15 +44,31 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddScoped<IProductService, ProductService>();
 
-builder.Services.AddScoped< CategoryService>();
+builder.Services.AddScoped<CategoryService>();
 
-builder.Services.AddScoped< SupplierService>();
+builder.Services.AddScoped<SupplierService>();
 
 builder.Services.AddScoped<IStockMovementService, StockMovementService>();
 
 builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 builder.Services.AddScoped<IReportService, ReportService>();
+
+builder.Services.AddScoped<IJwtService, JwtService>();
+
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+// AUDIT
+builder.Services.AddScoped<IAuditService, AuditService>();
+
+// TODO:
+// Register IAuditLogRepository when AuditLogRepository is implemented.
+// builder.Services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+
+// CURRENT USER
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
 
 builder.Services.AddScoped<IJwtService,
     JwtService>();

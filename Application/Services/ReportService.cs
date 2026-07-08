@@ -7,6 +7,7 @@ using StockFlow.Infrastructure.Services.Export;
 using StockFlow.Application.DTOs.ResumeReports.Reports;
 using StockFlow.Application.Interfaces.Identity;
 using StockFlow.Application.Interfaces.ResumeReports;
+using StockFlow.Application.Interfaces.IAudit;
 
 namespace StockFlow.Application.Services
 {

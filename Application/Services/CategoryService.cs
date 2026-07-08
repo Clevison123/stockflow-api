@@ -4,6 +4,7 @@ using StockFlow.Infrastructure.Data;
 using StockFlow.Domain.Entities.Catalog;
 using StockFlow.Application.DTOs.Catalog.Category;
 using StockFlow.Application.Interfaces.Identity;
+using StockFlow.Application.Interfaces.IAudit;
 
 namespace StockFlow.Application.Services
 {

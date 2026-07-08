@@ -7,6 +7,7 @@ using StockFlow.Infrastructure.Data;
 using StockFlow.Application.DTOs.Inventory.StockMovement;
 using StockFlow.Application.Interfaces.Identity;
 using StockFlow.Application.Interfaces.Inventory;
+using StockFlow.Application.Interfaces.IAudit;
 
 namespace StockFlow.Application.Services
 {
