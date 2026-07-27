@@ -1,5 +1,5 @@
 ﻿using StockFlow.Application.DTOs.Sales.SalesOrderItem;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Sales;
 
 namespace StockFlow.Application.DTOs.Sales.SalesOrder
 {
@@ -8,6 +8,8 @@ namespace StockFlow.Application.DTOs.Sales.SalesOrder
         public int Id { get; set; }
 
         public string OrderNumber { get; set; } = string.Empty;
+
+        public int CustomerId { get; set; }
 
         public string CustomerName { get; set; } = string.Empty;
 

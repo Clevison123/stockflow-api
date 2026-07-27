@@ -6,27 +6,20 @@ namespace StockFlow.Application.Interfaces.Catalog.IServices
 {
     public interface IProductService
     {
-        Task<ProductResponseDto> CreateAsync(
-            CreateProductDto dto);
+        Task<ProductResponseDto> CreateAsync(CreateProductDto dto);
 
-        Task<ProductResponseDto> UpdateAsync(
-            int id,
-            UpdateProductDto dto);
+        Task<ProductResponseDto> UpdateAsync(int id,UpdateProductDto dto);
 
-        Task<ProductResponseDto> GetByIdAsync(
-            int id);
+        Task<ProductResponseDto> GetByIdAsync(int id);
 
-        Task<PagedResult<ProductResponseDto>> GetAllAsync(
-            ProductQueryParameters query);
+        Task<PagedResult<ProductResponseDto>> GetAllAsync(ProductQueryParametersDto query);
 
         Task ActivateAsync(int id);
 
         Task DeactivateAsync(int id);
 
-        Task<IEnumerable<ProductResponseDto>>
-            GetLowStockProductsAsync();
+        Task<IEnumerable<LowStockProductDto>>GetLowStockAsync();
 
-        Task<int> GetCurrentStockAsync(
-            int productId);
+        Task<CurrentStockProductDto> GetCurrentStockAsync(int productId);
     }
 }

@@ -1,35 +1,22 @@
 ﻿using StockFlow.Application.DTOs.Logistics.Delivery;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Logistics;
 
 namespace StockFlow.Application.Interfaces.Logistics
 {
     public interface IDeliveryService
     {
-        Task<DeliveryResponseDto> CreateAsync(
-            CreateDeliveryDto dto);
+        Task<DeliveryResponseDto> CreateAsync(CreateDeliveryDto createDelivery);
 
-        Task<DeliveryResponseDto> UpdateAsync(
-            int id,
-            UpdateDeliveryDto dto);
+        Task<DeliveryResponseDto> UpdateAsync(int id,UpdateDeliveryDto updateDelivery);
 
-        Task<DeliveryResponseDto> GetByIdAsync(
-            int id);
+        Task<DeliveryResponseDto> GetByIdAsync(int id);
 
-        Task<IEnumerable<DeliveryResponseDto>>
-            GetAllAsync();
+        Task<IEnumerable<DeliveryResponseDto>>GetAllAsync();
 
-        Task<IEnumerable<DeliveryResponseDto>>
-            GetByStatusAsync(
-                DeliveryStatus status);
+        Task<IEnumerable<DeliveryResponseDto>>GetByStatusAsync(DeliveryStatus deliveryStatus);
 
-        Task StartDeliveryAsync(
-            int deliveryId);
+        Task<DeliveryResponseDto> UpdateStatusAsync(int id,UpdateDeliveryStatusDto dto);
 
-        Task CompleteDeliveryAsync(
-            int deliveryId);
-
-        Task CancelDeliveryAsync(
-            int deliveryId,
-            string reason);
+        Task DeleteAsync(int id);
     }
 }

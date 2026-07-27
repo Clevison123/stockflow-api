@@ -1,6 +1,6 @@
 ﻿using StockFlow.Domain.Entities.Common;
 using StockFlow.Domain.Entities.Sales;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Sales;
 
 namespace StockFlow.Domain.Entities.Quality
 {

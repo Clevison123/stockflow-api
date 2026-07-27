@@ -25,10 +25,8 @@ namespace StockFlow.Domain.Entities.Sales
 
         public bool IsActive { get; set; } = true;
 
-        public ICollection<SalesOrder> SalesOrders { get; set; }
-            = new List<SalesOrder>();
+        public ICollection<SalesOrder> SalesOrders { get; set; }  = new List<SalesOrder>();
 
-        public ICollection<Delivery> Deliveries { get; set; }
-            = new List<Delivery>();
+        public ICollection<Delivery> Deliveries { get; set; } = new List<Delivery>();
     }
 }

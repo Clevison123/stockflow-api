@@ -3,8 +3,7 @@ using StockFlow.Application.DTOs.InboundShipmentItem;
 
 namespace StockFlow.Application.Validators.Purchasing.InboundShipmentItem
 {
-    public class CreateInboundShipmentItemValidator
-        : AbstractValidator<CreateInboundShipmentItemDto>
+    public class CreateInboundShipmentItemValidator : AbstractValidator<CreateInboundShipmentItemDto>
     {
         public CreateInboundShipmentItemValidator()
         {
@@ -13,8 +12,8 @@ namespace StockFlow.Application.Validators.Purchasing.InboundShipmentItem
                 .WithMessage("Produto inválido.");
 
             RuleFor(x => x.Quantity)
-                .GreaterThan(0)
-                .WithMessage("A quantidade deve ser maior que zero.");
+                .InclusiveBetween(1, 100000)
+                .WithMessage("A quantidade deve estar entre 1 e 100000.");
         }
     }
 }

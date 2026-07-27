@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Inventory;
 
 namespace StockFlow.Application.DTOs.Inventory.StockMovement
 {

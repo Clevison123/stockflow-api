@@ -1,10 +1,13 @@
-﻿using StockFlow.Domain.Entities.Catalog;
+﻿using StockFlow.Application.Common.Pagination;
+using StockFlow.Application.DTOs.Catalog.Category;
+using StockFlow.Application.DTOs.Catalog.Product;
+using StockFlow.Domain.Entities.Catalog;
 
 namespace StockFlow.Application.Interfaces.Catalog
 {
     public interface ICategoryRepository
     {
-        Task<IEnumerable<Category>> GetAllAsync(string? search);
+        Task<PagedResult<Category>> GetAllAsync(CategoryQueryParametersDto queryParameters);
 
         Task<Category?> GetByIdAsync(int id);
 

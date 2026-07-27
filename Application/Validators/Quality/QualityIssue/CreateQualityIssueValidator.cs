@@ -12,10 +12,6 @@ namespace StockFlow.Application.Validators.Quality.QualityIssue
                 .GreaterThan(0)
                 .WithMessage("Item de produto inválido.");
 
-            RuleFor(x => x.DetectedByUserId)
-                .GreaterThan(0)
-                .WithMessage("Usuário responsável inválido.");
-
             RuleFor(x => x.IssueType)
                 .IsInEnum()
                 .WithMessage("Tipo de problema inválido.");

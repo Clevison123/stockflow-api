@@ -1,12 +1,14 @@
-﻿using StockFlow.Domain.Entities.Catalog;
-using StockFlow.Domain.Enums;
+﻿using StockFlow.Application.Common.Pagination;
+using StockFlow.Application.DTOs.Catalog.Product;
+using StockFlow.Domain.Entities.Catalog;
+using StockFlow.Domain.Enums.Catalog;
 
 namespace StockFlow.Application.Interfaces.Catalog
 {
     public interface IProductRepository
     {
         // PRODUCT (core)
-        Task<IEnumerable<Product>> GetAllAsync(string? search);
+        Task<PagedResult<Product>> GetAllAsync(ProductQueryParametersDto queryParameters);
 
         Task<Product?> GetByIdAsync(int id);
 
@@ -21,17 +23,35 @@ namespace StockFlow.Application.Interfaces.Catalog
 
         Task<IEnumerable<Product>> GetBySupplierAsync(int supplierId);
 
-        // PRODUCT ITEMS (sem repository próprio)
+        // PRODUCT ITEMS
 
         Task<Product?> GetWithItemsAsync(int productId);
 
+        Task<ProductItem?> GetItemByIdAsync(int id);
+
         Task<ProductItem?> GetItemBySerialAsync(string serialNumber);
 
-        Task AddProductItemAsync(int productId, ProductItem item);
+        Task<IEnumerable<ProductItem>> GetItemsByProductIdAsync(int productId);
+
+        Task<IEnumerable<ProductItem>> GetItemsByVariantIdAsync(int variantId);
+
+        Task AddProductItemAsync(ProductItem item);
 
         Task UpdateProductItemStatusAsync(int productItemId, ProductItemStatus status);
 
         Task<IEnumerable<ProductItem>> GetItemsByStatusAsync(ProductItemStatus status);
+
+        // PRODUCT VARIANTS
+        Task<ProductVariant?> GetVariantByIdAsync(int id);
+
+        Task<IEnumerable<ProductVariant>> GetVariantsByProductIdAsync(int productId);
+        Task<IEnumerable<ProductVariant>> GetAllVariantsAsync();
+
+        Task AddProductVariantAsync(ProductVariant variant);
+
+        Task UpdateProductVariantAsync(ProductVariant variant);
+
+        Task DeleteProductVariantAsync(ProductVariant variant);
 
         // WRITE
         Task AddAsync(Product product);

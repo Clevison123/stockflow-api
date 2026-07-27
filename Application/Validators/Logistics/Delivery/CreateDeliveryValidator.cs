@@ -15,10 +15,8 @@ namespace StockFlow.Application.Validators.Logistics.Delivery
             RuleFor(x => x.DriverName)
                 .NotEmpty()
                 .WithMessage("O motorista é obrigatório.")
-                .MinimumLength(3)
-                .WithMessage("O nome do motorista deve possuir no mínimo 3 caracteres.")
-                .MaximumLength(100)
-                .WithMessage("O nome do motorista deve possuir no máximo 100 caracteres.");
+                .Length(3, 100)
+                .WithMessage("O nome do motorista deve possuir entre 3 e 100 caracteres.");
 
             RuleFor(x => x.VehiclePlate)
                 .NotEmpty()

@@ -3,18 +3,21 @@ using StockFlow.Application.DTOs.Purchasing.Supplier;
 
 namespace StockFlow.Application.Validators.Purchasing.Supplier
 {
-    public class UpdateSupplierValidator
-        : AbstractValidator<UpdateSupplierDto>
+    public class UpdateSupplierValidator : AbstractValidator<UpdateSupplierDto>
     {
         public UpdateSupplierValidator()
         {
+            RuleFor(x => x.Name)
+                .NotEmpty()
+                .WithMessage("O nome do fornecedor é obrigatório.")
+                .Length(3, 150)
+                .WithMessage("O nome do fornecedor deve possuir entre 3 e 150 caracteres.");
+
             RuleFor(x => x.ContactPerson)
                 .NotEmpty()
                 .WithMessage("O responsável pelo contato é obrigatório.")
-                .MinimumLength(3)
-                .WithMessage("O responsável deve possuir no mínimo 3 caracteres.")
-                .MaximumLength(100)
-                .WithMessage("O responsável deve possuir no máximo 100 caracteres.");
+                .Length(3, 100)
+                .WithMessage("O responsável deve possuir entre 3 e 100 caracteres.");
 
             RuleFor(x => x.Email)
                 .NotEmpty()
@@ -27,10 +30,8 @@ namespace StockFlow.Application.Validators.Purchasing.Supplier
             RuleFor(x => x.Phone)
                 .NotEmpty()
                 .WithMessage("O telefone é obrigatório.")
-                .MinimumLength(10)
-                .WithMessage("O telefone deve possuir no mínimo 10 caracteres.")
-                .MaximumLength(20)
-                .WithMessage("O telefone deve possuir no máximo 20 caracteres.");
+                .Length(10, 20)
+                .WithMessage("O telefone deve possuir entre 10 e 20 caracteres.");
 
             RuleFor(x => x.Address)
                 .NotEmpty()

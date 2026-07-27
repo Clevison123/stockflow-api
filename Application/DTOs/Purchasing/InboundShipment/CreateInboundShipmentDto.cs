@@ -1,4 +1,4 @@
-﻿using StockFlow.Application.DTOs.InboundShipmentItem.StockFlow.Application.DTOs.InboundShipment;
+﻿using StockFlow.Application.DTOs.InboundShipmentItem;
 
 namespace StockFlow.Application.DTOs.Purchasing.InboundShipment
 {
@@ -15,6 +15,7 @@ namespace StockFlow.Application.DTOs.Purchasing.InboundShipment
         public int SupplierId { get; set; }
 
         public string Notes { get; set; } = string.Empty;
+
         public List<CreateInboundShipmentItemDto>
             Items
         { get; set; } = [];

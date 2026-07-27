@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Catalog;
 
 namespace StockFlow.Application.DTOs.Catalog.ProductItem
 {

@@ -1,10 +1,9 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Audit;
 
 namespace StockFlow.Application.DTOs.Audit
 {
     public class CreateAuditLogDto
     {
-        //public int? UserId { get; set; }
 
         public AuditAction Action { get; set; }
 
@@ -24,6 +23,5 @@ namespace StockFlow.Application.DTOs.Audit
 
         public string? UserAgent { get; set; }
 
-        //public DateTime CreatedAt { get; set; }
     }
 }

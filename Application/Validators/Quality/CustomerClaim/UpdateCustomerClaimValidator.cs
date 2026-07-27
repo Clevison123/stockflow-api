@@ -12,7 +12,9 @@ namespace StockFlow.Application.Validators.Quality.CustomerClaim
                 .IsInEnum()
                 .WithMessage("Tipo de reclamação inválido.");
 
+
             RuleFor(x => x.Description)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage("A descrição da reclamação é obrigatória.")
                 .MinimumLength(10)

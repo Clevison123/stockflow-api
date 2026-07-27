@@ -31,4 +31,9 @@
     <Folder Include="Infrastructure\ExternalServices\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Application\Exceptions\ApplicationValidationException.cs" />
+    <None Include="Domain\Entities\Catalog\ProductVariant.cs" />
+  </ItemGroup>
+
 </Project>

@@ -12,15 +12,20 @@ namespace StockFlow.Application.Validators.Quality.CustomerClaim
                 .GreaterThan(0)
                 .WithMessage("Cliente inválido.");
 
+
             RuleFor(x => x.SalesOrderId)
                 .GreaterThan(0)
                 .WithMessage("Pedido inválido.");
+
 
             RuleFor(x => x.ClaimType)
                 .IsInEnum()
                 .WithMessage("Tipo de reclamação inválido.");
 
+
+
             RuleFor(x => x.Description)
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
                 .WithMessage("A descrição da reclamação é obrigatória.")
                 .MinimumLength(10)

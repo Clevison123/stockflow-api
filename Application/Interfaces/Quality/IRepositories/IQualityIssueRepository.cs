@@ -1,5 +1,5 @@
 ﻿using StockFlow.Domain.Entities.Quality;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Quality;
 
 namespace StockFlow.Application.Interfaces.Quality
 {
@@ -17,6 +17,8 @@ namespace StockFlow.Application.Interfaces.Quality
         Task<IEnumerable<QualityIssue>> GetOpenIssuesAsync();
 
         Task<IEnumerable<QualityIssue>> GetResolvedIssuesAsync();
+
+        Task<IEnumerable<QualityIssue>> GetPendingSupplierClaimsAsync();
 
         Task<IEnumerable<QualityIssue>> GetByTypeAsync(QualityIssueType type);
 

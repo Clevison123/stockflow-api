@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Purchasing;
 
 namespace StockFlow.Application.DTOs.SupplierClaim
 {

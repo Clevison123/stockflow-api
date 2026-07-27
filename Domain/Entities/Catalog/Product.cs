@@ -1,6 +1,6 @@
 ﻿using StockFlow.Domain.Entities.Common;
-using StockFlow.Domain.Entities.Inventory;
 using StockFlow.Domain.Entities.Purchasing;
+using StockFlow.Domain.Entities.Inventory;
 
 namespace StockFlow.Domain.Entities.Catalog
 {
@@ -18,7 +18,7 @@ namespace StockFlow.Domain.Entities.Catalog
 
         public string Model { get; set; } = string.Empty;
 
-        public string CountryOfOrigin { get; set; } = string.Empty;
+        public string OriginCountry { get; set; } = string.Empty;
 
         public int WarrantyMonths { get; set; }
 

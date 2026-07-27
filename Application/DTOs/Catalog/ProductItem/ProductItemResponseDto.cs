@@ -1,4 +1,5 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Application.DTOs.Catalog.ProductVariant;
+using StockFlow.Domain.Enums.Catalog;
 
 namespace StockFlow.Application.DTOs.Catalog.ProductItem
 {
@@ -7,6 +8,8 @@ namespace StockFlow.Application.DTOs.Catalog.ProductItem
         public int Id { get; set; }
 
         public string ProductName { get; set; } = string.Empty;
+
+        public ProductVariantSummaryDto Variant { get; set; } = null!;
 
         public string SerialNumber { get; set; } = string.Empty;
 

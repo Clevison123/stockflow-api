@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using StockFlow.API.Presentation.Responses;
-using StockFlow.Application.DTOs.ResumeReports.Reports;
+using StockFlow.Application.DTOs.Reports;
+using StockFlow.Application.DTOs.Reports.Catalog;
+using StockFlow.Application.DTOs.Reports.Sales;
 using StockFlow.Application.Interfaces.ResumeReports;
 
 namespace StockFlow.API.src.Presentation.Controllers

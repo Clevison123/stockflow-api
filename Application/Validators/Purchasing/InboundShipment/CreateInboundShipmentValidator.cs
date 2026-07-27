@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using StockFlow.Application.DTOs.Purchasing.InboundShipment;
+using StockFlow.Application.Validators.Purchasing.InboundShipmentItem;
 
 namespace StockFlow.Application.Validators.Purchasing.InboundShipment
 {
@@ -41,6 +42,9 @@ namespace StockFlow.Application.Validators.Purchasing.InboundShipment
             RuleFor(x => x.Items)
                 .NotEmpty()
                 .WithMessage("A remessa deve possuir pelo menos um item.");
+           
+            RuleForEach(x => x.Items)
+                .SetValidator(new CreateInboundShipmentItemValidator());
         }
     }
 }

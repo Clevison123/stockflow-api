@@ -1,6 +1,6 @@
 ﻿using StockFlow.Domain.Entities.Common;
 using StockFlow.Domain.Entities.Identity;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Audit;
 
 namespace StockFlow.Domain.Entities.Audit
 {

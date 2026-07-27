@@ -1,6 +1,6 @@
 ﻿using StockFlow.Domain.Entities.Catalog;
 using StockFlow.Domain.Entities.Common;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Inventory;
 
 namespace StockFlow.Domain.Entities.Inventory
 {
@@ -18,5 +18,7 @@ namespace StockFlow.Domain.Entities.Inventory
         public int CurrentQuantity { get; set; }
 
         public string Reason { get; set; } = string.Empty;
+
+        public int? PerformedByUserId { get; set; }
     }
 }

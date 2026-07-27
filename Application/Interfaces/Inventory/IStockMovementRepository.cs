@@ -1,11 +1,12 @@
 ﻿using StockFlow.Domain.Entities.Inventory;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Inventory;
 
 namespace StockFlow.Application.Interfaces.Inventory
 {
     public interface IStockMovementRepository
     {
-        // READ
+        Task<StockMovement?> GetByIdAsync(int id);
+
         Task<IEnumerable<StockMovement>> GetAllAsync();
 
         Task<IEnumerable<StockMovement>> GetByProductIdAsync(int productId);
@@ -14,7 +15,6 @@ namespace StockFlow.Application.Interfaces.Inventory
 
         Task<IEnumerable<StockMovement>> GetRecentAsync(int count);
 
-        // WRITE
         Task AddAsync(StockMovement movement);
 
         Task DeleteAsync(StockMovement movement);

@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Sales;
 
 namespace StockFlow.Application.DTOs.Quality.CustomerClaim
 {

@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Inventory;
 
 namespace StockFlow.Application.DTOs.Inventory.StockMovement
 {
@@ -13,6 +13,10 @@ namespace StockFlow.Application.DTOs.Inventory.StockMovement
         public MovementType MovementType { get; set; }
 
         public int Quantity { get; set; }
+
+        public int PreviousQuantity { get; set; }
+
+        public int CurrentQuantity { get; set; }
 
         public string Reason { get; set; } = string.Empty;
 

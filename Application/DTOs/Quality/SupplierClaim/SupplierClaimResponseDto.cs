@@ -1,10 +1,12 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Purchasing;
 
 namespace StockFlow.Application.DTOs.SupplierClaim
 {
     public class SupplierClaimResponseDto
     {
         public int Id { get; set; }
+
+        public int SupplierId { get; set; }
 
         public string SupplierName { get; set; } = string.Empty;
 
@@ -14,7 +16,9 @@ namespace StockFlow.Application.DTOs.SupplierClaim
 
         public DateTime OpenedAt { get; set; }
 
-        public string OpenedBy { get; set; } = string.Empty;
+        public int OpenedByUserId { get; set; }
+
+        public string OpenedByUserName { get; set; } = string.Empty;
 
         public bool IsResolved { get; set; }
 

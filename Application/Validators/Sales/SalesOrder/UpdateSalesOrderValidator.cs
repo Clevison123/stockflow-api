@@ -3,8 +3,7 @@ using StockFlow.Application.DTOs.Sales.SalesOrder;
 
 namespace StockFlow.Application.Validators.Sales.SalesOrder
 {
-    public class UpdateSalesOrderValidator
-        : AbstractValidator<UpdateSalesOrderDto>
+    public class UpdateSalesOrderValidator : AbstractValidator<UpdateSalesOrderDto>
     {
         public UpdateSalesOrderValidator()
         {

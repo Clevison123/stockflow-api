@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Identity;
 
 namespace StockFlow.Application.Interfaces.Identity
 {

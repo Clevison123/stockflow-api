@@ -1,5 +1,5 @@
 ﻿using StockFlow.Domain.Entities.Quality;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Purchasing;
 
 namespace StockFlow.Application.Interfaces.Quality
 {

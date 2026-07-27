@@ -19,4 +19,6 @@ public class InboundShipment : BaseEntity
     public int SupplierId { get; set; }
 
     public Supplier Supplier { get; set; } = null!;
+
+    public ICollection<InboundShipmentItem> Items { get; set; } = new List<InboundShipmentItem>();
 }

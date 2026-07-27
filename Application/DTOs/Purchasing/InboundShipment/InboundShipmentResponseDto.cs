@@ -20,9 +20,6 @@ namespace StockFlow.Application.DTOs.Purchasing.InboundShipment
         public string SupplierName { get; set; } = string.Empty;
 
         public string Notes { get; set; } = string.Empty;
-        public IEnumerable<InboundShipmentItemResponseDto>
-            Items
-        { get; set; }
-            = new List<InboundShipmentItemResponseDto>();
+        public IEnumerable<InboundShipmentItemResponseDto> Items { get; set; } = new List<InboundShipmentItemResponseDto>();
     }
 }

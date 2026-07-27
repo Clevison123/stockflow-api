@@ -1,5 +1,5 @@
 ﻿using StockFlow.Domain.Entities.Common;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Sales;
 
 namespace StockFlow.Domain.Entities.Sales
 {
@@ -19,7 +19,6 @@ namespace StockFlow.Domain.Entities.Sales
 
         public string Notes { get; set; } = string.Empty;
 
-        public ICollection<SalesOrderItem> Items { get; set; }
-            = new List<SalesOrderItem>();
+        public ICollection<SalesOrderItem> Items { get; set; } = new List<SalesOrderItem>();
     }
 }

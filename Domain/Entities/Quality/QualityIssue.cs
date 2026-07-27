@@ -1,7 +1,7 @@
 ﻿using StockFlow.Domain.Entities.Catalog;
 using StockFlow.Domain.Entities.Common;
 using StockFlow.Domain.Entities.Identity;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Quality;
 
 namespace StockFlow.Domain.Entities.Quality
 {

@@ -1,6 +1,5 @@
-﻿using StockFlow.Domain.Constants;
-using StockFlow.Domain.Entities.Common;
-using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Entities.Common;
+using StockFlow.Domain.Enums.Identity;
 
 namespace StockFlow.Domain.Entities.Identity
 {
@@ -21,7 +20,6 @@ namespace StockFlow.Domain.Entities.Identity
         public bool IsActive { get; set; } = true;
 
         public DateTime? LastLoginAt { get; set; }
-        public ICollection<RefreshToken> RefreshTokens { get; set; }
-    = new List<RefreshToken>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
     }
 }

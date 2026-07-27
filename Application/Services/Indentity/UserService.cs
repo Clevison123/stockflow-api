@@ -3,7 +3,7 @@ using StockFlow.Application.DTOs.Identity.Users;
 using StockFlow.Application.Exceptions;
 using StockFlow.Application.Interfaces.Identity;
 using StockFlow.Domain.Entities.Identity;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Identity;
 
 namespace StockFlow.Application.Services.Indentity
 {

@@ -1,5 +1,5 @@
 ﻿using StockFlow.Domain.Entities.Audit;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Audit;
 
 namespace StockFlow.Application.Interfaces.IAudit
 {

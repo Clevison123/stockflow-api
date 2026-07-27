@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Logistics;
 
 namespace StockFlow.Application.DTOs.Logistics.Delivery
 {
@@ -7,6 +7,7 @@ namespace StockFlow.Application.DTOs.Logistics.Delivery
         public int Id { get; set; }
 
         public int SalesOrderId { get; set; }
+        public string OrderNumber { get; set; } = string.Empty;
 
         public DeliveryStatus Status { get; set; }
 

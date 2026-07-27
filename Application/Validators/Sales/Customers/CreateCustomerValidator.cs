@@ -3,8 +3,7 @@ using StockFlow.Application.DTOs.Sales.Customers;
 
 namespace StockFlow.Application.Validators.Sales.Customers
 {
-    public class CreateCustomerValidator
-        : AbstractValidator<CreateCustomerDto>
+    public class CreateCustomerValidator : AbstractValidator<CreateCustomerDto>
     {
         public CreateCustomerValidator()
         {

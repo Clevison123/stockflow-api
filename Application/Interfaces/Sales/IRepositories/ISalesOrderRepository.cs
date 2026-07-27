@@ -1,5 +1,5 @@
 ﻿using StockFlow.Domain.Entities.Sales;
-using StockFlow.Domain.Enums;
+using StockFlow.Domain.Enums.Sales;
 
 namespace StockFlow.Application.Interfaces.Sales
 {

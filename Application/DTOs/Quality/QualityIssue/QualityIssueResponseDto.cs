@@ -1,29 +1,27 @@
-﻿using StockFlow.Domain.Enums;
-
-namespace StockFlow.Application.DTOs.Quality.QualityIssue
+﻿using StockFlow.Domain.Enums.Quality;
+public class QualityIssueResponseDto
 {
-    public class QualityIssueResponseDto
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public int ProductItemId { get; set; }
+    public int ProductItemId { get; set; }
 
-        public string ProductName { get; set; } = string.Empty;
+    public string ProductName { get; set; } = string.Empty;
 
-        public QualityIssueType IssueType { get; set; }
+    public QualityIssueType IssueType { get; set; }
 
-        public string Description { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
 
-        public DateTime DetectedAt { get; set; }
+    public DateTime DetectedAt { get; set; }
 
-        public string DetectedBy { get; set; } = string.Empty;
+    public int DetectedByUserId { get; set; }
 
-        public bool RequiresSupplierClaim { get; set; }
+    public string DetectedByUserName { get; set; } = string.Empty;
 
-        public bool IsResolved { get; set; }
+    public bool RequiresSupplierClaim { get; set; }
 
-        public DateTime? ResolvedAt { get; set; }
+    public bool IsResolved { get; set; }
 
-        public string ResolutionNotes { get; set; } = string.Empty;
-    }
+    public DateTime? ResolvedAt { get; set; }
+
+    public string ResolutionNotes { get; set; } = string.Empty;
 }

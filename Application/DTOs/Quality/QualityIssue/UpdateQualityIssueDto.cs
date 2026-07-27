@@ -1,4 +1,4 @@
-﻿using StockFlow.Domain.Enums;
+﻿using StockFlow.Domain.Enums.Quality;
 
 namespace StockFlow.Application.DTOs.Quality.QualityIssue
 {
